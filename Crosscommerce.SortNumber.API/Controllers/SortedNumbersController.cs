@@ -18,11 +18,13 @@ namespace Crosscommerce.SortNumber.API.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            var x = GetNumbers(2);
+            
+            var x = GetAllNumbers();
+            GetAllNumbers().Data.Count();
             return new JsonResult("");
         }
 
-        public Result<PagesModel> GetNumbers(int page)
+        public Result<List<string>> GetNumbers(int page)
         {
             try
             {
@@ -33,27 +35,90 @@ namespace Crosscommerce.SortNumber.API.Controllers
 
                 var response = client.ExecuteAsync<PagesModel>(request).Result;
 
-                var result = JsonConvert.DeserializeObject<PagesModel>(response.Content);
+                var result = JsonConvert.DeserializeObject<List<string>>(response.Content);
 
-                return new Result<PagesModel>() { Data = result };
+                return new Result<List<string>>() { Data = result };
             }
             catch (Exception ex)
             {
-                return new Result<PagesModel>() { Exception = new Exception("Error getting numbers", ex) };
+                return new Result<List<string>>() { Exception = new Exception("Error getting numbers", ex) };
             }
             
         }
 
-        public Result<List<PagesModel>> GetAllNumbers(PagesModel numbers)
+        public Result<List<string>> GetAllNumbers()
         {
             try
             {
 
-            }
-            catch (Exception)
-            {
+                List<string> allnumbers = new List<string>();
+                for (int i = 0; i < 10; i++)
+                {
+                    var x = GetNumbers(i).Data;
+                    allnumbers.AddRange(x);
+                }             
 
-                throw;
+
+                return new Result<List<string>>() { Data = allnumbers };
+            }
+            catch (Exception ex)
+            {
+                return new Result<List<string>>() { Exception = new Exception("Error getting all numbers", ex) };
+            }
+        }
+
+        public void QuickSort()
+        {
+            sort(0, GetAllNumbers().Data.Count() - 1);
+        }
+
+        public void sort(int left, int right, List<string> allNumbers )
+        {
+            double pivot;
+            int leftend, rightend;
+
+            leftend = (int)left;
+            rightend = (int)right;
+            pivot = Convert.ToDouble(allNumbers[left]);
+
+            while (left < right)
+            {
+                while ((Convert.ToDouble(allNumbers[right]) >= pivot) && (left < right))
+                {
+                    right--;
+                }
+
+                if (left != right)
+                {
+                    allNumbers[left] = allNumbers[right];
+                    left++;
+                }
+
+                while ((Convert.ToDouble(allNumbers[left]) <= pivot) && (left < right))
+                {
+                    left++;
+                }
+
+                if (left != right)
+                {
+                    allNumbers[right] = allNumbers[left];
+                    right--;
+                }
+            }
+
+            allNumbers[left] = pivot.ToString() ;
+            pivot = left;
+            left = leftend;
+            right = rightend;
+
+            if (left < pivot)
+            {
+                sort(left, Convert.ToInt32(pivot - 1), allNumbers);
+            }
+
+            if (right > pivot)
+            {
+                sort(Convert.ToInt32(pivot + 1), right, allNumbers);
             }
         }
     }
