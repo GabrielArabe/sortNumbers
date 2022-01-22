@@ -18,10 +18,14 @@ namespace Crosscommerce.SortNumber.API.Controllers
         [HttpGet]
         public JsonResult Get()
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+
+
             
-            var x = GetAllNumbers();
-            GetAllNumbers().Data.Count();
-            return new JsonResult("");
+            QuickSort();
+
+            return new JsonResult(GetAllNumbers().Data);
         }
 
         public Result<List<string>> GetNumbers(int page)
@@ -69,7 +73,9 @@ namespace Crosscommerce.SortNumber.API.Controllers
 
         public void QuickSort()
         {
-            sort(0, GetAllNumbers().Data.Count() - 1);
+            var allNumbers = GetAllNumbers();
+            sort(0, allNumbers.Data.Count() - 1, allNumbers.Data);
+            Console.WriteLine(allNumbers);
         }
 
         public void sort(int left, int right, List<string> allNumbers )
@@ -77,8 +83,8 @@ namespace Crosscommerce.SortNumber.API.Controllers
             double pivot;
             int leftend, rightend;
 
-            leftend = (int)left;
-            rightend = (int)right;
+            leftend = left;
+            rightend = right;
             pivot = Convert.ToDouble(allNumbers[left]);
 
             while (left < right)
