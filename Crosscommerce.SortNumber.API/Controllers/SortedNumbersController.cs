@@ -1,13 +1,17 @@
 ﻿using Crosscommerce.SortNumber.API.Model;
+using Crosscommerce.SortNumber.API.Models;
 using Crosscommerce.SortNumber.API.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
+using Serilog;
+using Serilog.Formatting.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace Crosscommerce.SortNumber.API.Controllers
 {
@@ -15,77 +19,121 @@ namespace Crosscommerce.SortNumber.API.Controllers
     [ApiController]
     public class SortedNumbersController : ControllerBase
     {
+        private ILogger _logger;
+        public SortedNumbersController(ILogger logger)
+        {
+            _logger = logger;
+        }
 
-        
         [HttpGet]
         public JsonResult Get()
         {
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            try
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+                System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
 
-            var resultSortedNumbers = quickSort();
-            return new JsonResult(resultSortedNumbers.Count);
+                var resultSortedNumbers = quickSort();
+                if (resultSortedNumbers.isSuccess)
+                {
+                    _logger.Information(resultSortedNumbers.Data.Count.ToString());
+                    return new JsonResult(resultSortedNumbers.Data.Count);
+                }
+                _logger.Warning(resultSortedNumbers.Exception.Message);
+
+                return new JsonResult(resultSortedNumbers.Exception);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error getting result: ", ex);
+                return new JsonResult(ex.Message);
+            }
         }
 
 
-        private List<double> quickSort()
+        private Result<List<double>> quickSort()
         {
-            var fetcher = new Fetcher();
-            var allNumbers = fetcher.GetAllNumbers();
+            try
+            {
+                var fetcher = new Fetcher(_logger);
+                var allNumbers = fetcher.GetAllNumbers().Data;
 
-            sort(0, allNumbers.Count() - 1, allNumbers);
 
-            return allNumbers;
+                sort(0, allNumbers.Count() - 1, allNumbers);
+
+                _logger.Information("Success sorting all numbers");
+                return new Result<List<double>>() { Data = allNumbers };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error getting quick sort", ex);
+                return new Result<List<double>>() { Exception = new Exception("Error getting quick sort", ex) };
+            }
+
         }
 
-        private void sort(int left, int right, List<double> allNumbers)
+        private Result sort(int left, int right, List<double> allNumbers)
         {
-            double pivot;
-            int leftend, rightend;
-
-            leftend = left;
-            rightend = right;
-            pivot = allNumbers[left];
-
-            while (left < right)
+            try
             {
-                while (allNumbers[right] >= pivot && (left < right))
+                _logger.Information("Started sort");
+                double pivot;
+                int leftend, rightend;
+
+                leftend = left;
+                rightend = right;
+                pivot = allNumbers[left];
+
+                while (left < right)
                 {
-                    right--;
+                    while (allNumbers[right] >= pivot && (left < right))
+                    {
+                        right--;
+                    }
+
+                    if (left != right)
+                    {
+                        allNumbers[left] = allNumbers[right];
+                        left++;
+                    }
+
+                    while (allNumbers[left] <= pivot && (left < right))
+                    {
+                        left++;
+                    }
+
+                    if (left != right)
+                    {
+                        allNumbers[right] = allNumbers[left];
+                        right--;
+                    }
                 }
 
-                if (left != right)
+                allNumbers[left] = pivot;
+                pivot = left;
+                left = leftend;
+                right = rightend;
+
+                if (left < pivot)
                 {
-                    allNumbers[left] = allNumbers[right];
-                    left++;
+                    sort(left, Convert.ToInt32(pivot - 1), allNumbers);
                 }
 
-                while (allNumbers[left] <= pivot && (left < right))
+                if (right > pivot)
                 {
-                    left++;
+                    sort(Convert.ToInt32(pivot + 1), right, allNumbers);
                 }
 
-                if (left != right)
-                {
-                    allNumbers[right] = allNumbers[left];
-                    right--;
-                }
+                _logger.Information("Finished sort");
+                return new Result();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error sorting: ", ex);
+                return new Result() { Exception = new Exception("Error sorting: ", ex) };
             }
 
-            allNumbers[left] = pivot;
-            pivot = left;
-            left = leftend;
-            right = rightend;
-
-            if (left < pivot)
-            {
-                sort(left, Convert.ToInt32(pivot - 1), allNumbers);
-            }
-
-            if (right > pivot)
-            {
-                sort(Convert.ToInt32(pivot + 1), right, allNumbers);
-            }
         }
 
     }
@@ -98,57 +146,100 @@ public class Fetcher
     private int lastPage = 0;
     private static object @lock = new Object();
     private List<double> fullListOfNumbers = new List<double>(1000000);
-
-    public List<double> GetAllNumbers()
+    private ILogger _logger;
+    public Fetcher(ILogger logger)
     {
-        var threadCount = Environment.ProcessorCount;
-        var workers = new List<Task>();
-        for (int i = 0; i < threadCount; i++)
+        _logger = logger;
+    }
+    public Result<List<double>> GetAllNumbers()
+    {
+        try
         {
-            workers.Add(startWorker());
+            var threadCount = Environment.ProcessorCount;
+            _logger.Information($"Starting {threadCount} threads");
+            var workers = new List<Task>();
+            for (int i = 0; i < threadCount; i++)
+            {
+                workers.Add(startWorker());
+            }
+
+            Task.WaitAll(workers.ToArray());
+
+            _logger.Information("Success getting all numbers");
+            return new Result<List<double>>() { Data = fullListOfNumbers };
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("Error getting all numbers", ex);
+            return new Result<List<double>>() { Exception = new Exception("Error getting all numbers", ex) };
         }
 
-        Task.WaitAll(workers.ToArray());
-
-        return fullListOfNumbers;
     }
 
     private Task startWorker()
     {
-        var t = new Task(() =>
+        try
         {
-            FetchModel nextParameter = getNextParameters(true);
-            while (nextParameter != null)
+            var t = new Task(() =>
             {
-                var t = startNewTask(nextParameter);
-                t.Wait();
+                FetchModel nextParameter = getNextParameters(true);
+                while (nextParameter != null)
+                {
+                    var t = startNewTask(nextParameter);
+                    t.Wait();
 
-                nextParameter = taskCompleted(nextParameter);
-            }
-        });
+                    nextParameter = taskCompleted(nextParameter);
+                }
+            });
 
-        t.Start();
-        return t;
+            t.Start();
+            _logger.Information("Success starting worker");
+            return t;
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("Error starting worker", ex);
+            throw;
+        }
+        
     }
 
     private FetchModel taskCompleted(FetchModel fetchParameters)
     {
-        lock (@lock)
+        try
         {
-            if (fetchParameters.Numbers?.Count > 0)
-                fullListOfNumbers.AddRange(fetchParameters.Numbers);
-            else
-                return null;
-
-            return getNextParameters(false);
+            lock (@lock)
+            {
+                if (fetchParameters.Numbers?.Count > 0)
+                    fullListOfNumbers.AddRange(fetchParameters.Numbers);
+                else
+                    return null;
+           
+                return getNextParameters(false);
+            }
         }
+        catch (Exception ex)
+        {
+            _logger.Error("Error completing task", ex);
+            throw;
+        }
+        
     }
 
     private Task startNewTask(FetchModel fetchModel)
     {
-        var t = new Task(new Action<object>((p) => getPage((FetchModel)p)), fetchModel, System.Threading.Tasks.TaskCreationOptions.None);
-        t.Start();
-        return t;
+        try
+        {
+            var t = new Task(new Action<object>((p) => getPage((FetchModel)p)), fetchModel, System.Threading.Tasks.TaskCreationOptions.None);
+            t.Start();
+            return t;
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("Error starting new task", ex);
+            throw;
+        }
+
     }
 
     private FetchModel getNextParameters(bool shouldLock)
@@ -180,10 +271,12 @@ public class Fetcher
 
         Exception handleError(int maxAttempts, ref int attempts, string errorMessage)
         {
+            _logger.Warning($"Error getting page: {errorMessage}. Attempt number: {attempts}. Next attempt: {attempts+1}");
             attempts++;
             if (attempts >= maxAttempts)
             {
                 keepTrying = false;
+                _logger.Error($"reached maximum number of attempts: {attempts}. Error: {errorMessage}");
                 return new Exception(errorMessage);
             }
 
@@ -253,13 +346,7 @@ public class Fetcher
 
 }
 
-public class FetchModel
-{
-    public int Page { get; set; }
-    public List<double> Numbers { get; set; }
-    public bool IsSuccess { get; set; }
 
-}
 
 
 

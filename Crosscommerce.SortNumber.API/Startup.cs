@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Formatting.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +33,12 @@ namespace Crosscommerce.SortNumber.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Crosscommerce.SortNumber.API", Version = "v1" });
+            });
+
+            services.AddTransient<Serilog.ILogger>((s) =>
+            {
+                var log = new LoggerConfiguration().WriteTo.File(new JsonFormatter(renderMessage: true), "log.json").CreateLogger();
+                return log;
             });
         }
 
