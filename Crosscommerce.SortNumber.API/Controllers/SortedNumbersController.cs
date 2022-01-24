@@ -15,126 +15,78 @@ namespace Crosscommerce.SortNumber.API.Controllers
     [ApiController]
     public class SortedNumbersController : ControllerBase
     {
+
+        
         [HttpGet]
         public JsonResult Get()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
 
-            var fetcher = new Fetcher();
-            var result = fetcher.GetAllNumbers();
-
-            return new JsonResult(result.Count);
+            var resultSortedNumbers = quickSort();
+            return new JsonResult(resultSortedNumbers.Count);
         }
 
-        private void writeNumbers(List<string> numbers)
+
+        private List<double> quickSort()
         {
-            int i = 0;
-            foreach (var n in numbers)
+            var fetcher = new Fetcher();
+            var allNumbers = fetcher.GetAllNumbers();
+
+            sort(0, allNumbers.Count() - 1, allNumbers);
+
+            return allNumbers;
+        }
+
+        private void sort(int left, int right, List<double> allNumbers)
+        {
+            double pivot;
+            int leftend, rightend;
+
+            leftend = left;
+            rightend = right;
+            pivot = allNumbers[left];
+
+            while (left < right)
             {
-                var x = new JsonResult($"{++i} {n}");
+                while (allNumbers[right] >= pivot && (left < right))
+                {
+                    right--;
+                }
+
+                if (left != right)
+                {
+                    allNumbers[left] = allNumbers[right];
+                    left++;
+                }
+
+                while (allNumbers[left] <= pivot && (left < right))
+                {
+                    left++;
+                }
+
+                if (left != right)
+                {
+                    allNumbers[right] = allNumbers[left];
+                    right--;
+                }
+            }
+
+            allNumbers[left] = pivot;
+            pivot = left;
+            left = leftend;
+            right = rightend;
+
+            if (left < pivot)
+            {
+                sort(left, Convert.ToInt32(pivot - 1), null);
+            }
+
+            if (right > pivot)
+            {
+                sort(Convert.ToInt32(pivot + 1), right, null);
             }
         }
-
-        //private Result<List<string>> getNumbers(int page)
-        //{
-        //    try
-        //    {
-        //        var path = "http://challenge.dienekes.com.br/api/";
-
-        //        var client = new RestClient(path);
-        //        var request = new RestRequest("numbers", Method.Get).AddParameter("pages", page);
-
-        //        var response = client.ExecuteAsync<PagesModel>(request).Result;
-
-        //        var result = JsonConvert.DeserializeObject<List<string>>(response.Content);
-
-        //        return new Result<List<string>>() { Data = result };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Result<List<string>>() { Exception = new Exception("Error getting numbers", ex) };
-        //    }
-
-        //}
-
-        //private Result<List<string>> getAllNumbers()
-        //{
-        //    try
-        //    {
-
-        //        List<string> allnumbers = new List<string>();
-        //        for (int i = 0; i < 5; i++)
-        //        {
-        //            var x = getNumbers(i).Data;
-        //            allnumbers.AddRange(x);
-        //        }             
-
-
-        //        return new Result<List<string>>() { Data = allnumbers };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new Result<List<string>>() { Exception = new Exception("Error getting all numbers", ex) };
-        //    }
-
-
-        //private void quickSort()
-        //{           
-        //    var allNumbers = getAllNumbers();
-        //    sort(0, allNumbers.Data.Count() - 1, allNumbers.Data);
-        //    Console.WriteLine(allNumbers);
-        //}
-
-        //private void sort(int left, int right, List<string> allNumbers)
-        //{
-        //    double pivot;
-        //    int leftend, rightend;
-
-        //    leftend = left;
-        //    rightend = right;
-        //    pivot = Convert.ToDouble(allNumbers[left]);
-
-        //    while (left < right)
-        //    {
-        //        while ((Convert.ToDouble(allNumbers[right]) >= pivot) && (left < right))
-        //        {
-        //            right--;
-        //        }
-
-        //        if (left != right)
-        //        {
-        //            allNumbers[left] = allNumbers[right];
-        //            left++;
-        //        }
-
-        //        while ((Convert.ToDouble(allNumbers[left]) <= pivot) && (left < right))
-        //        {
-        //            left++;
-        //        }
-
-        //        if (left != right)
-        //        {
-        //            allNumbers[right] = allNumbers[left];
-        //            right--;
-        //        }
-        //    }
-
-        //    allNumbers[left] = pivot.ToString();
-        //    pivot = left;
-        //    left = leftend;
-        //    right = rightend;
-
-        //    if (left < pivot)
-        //    {
-        //        sort(left, Convert.ToInt32(pivot - 1), null);
-        //    }
-
-        //    if (right > pivot)
-        //    {
-        //        sort(Convert.ToInt32(pivot + 1), right, null);
-        //    }
-        //}
 
     }
 }
@@ -145,9 +97,9 @@ public class Fetcher
 
     private int lastPage = 0;
     private static object @lock = new Object();
-    private List<string> fullListOfNumbers = new List<string>();
+    private List<double> fullListOfNumbers = new List<double>(1000000);
 
-    public List<string> GetAllNumbers()
+    public List<double> GetAllNumbers()
     {
         var threadCount = Environment.ProcessorCount;
         var workers = new List<Task>();
@@ -183,7 +135,7 @@ public class Fetcher
     {
         lock (@lock)
         {
-            if (fetchParameters.Numbers?.Count > 0)
+            if (fetchParameters.Numbers?.Count > 0 && fetchParameters.Page < 32)
                 fullListOfNumbers.AddRange(fetchParameters.Numbers);
             else
                 return null;
@@ -242,10 +194,10 @@ public class Fetcher
         {
             try
             {
-                var path = "http://challenge.dienekes.com.br/api/";
+                var path = $"http://challenge.dienekes.com.br/api/numbers/?page={fetchtModel.Page}";
 
                 var client = new RestClient(path);
-                var request = new RestRequest("numbers", Method.Get).AddParameter("pages", fetchtModel.Page);
+                var request = new RestRequest("", method: Method.Get);
 
                 var response = client.ExecuteAsync<PagesModel>(request).Result;
                 if (!response.IsSuccessful)
@@ -260,15 +212,12 @@ public class Fetcher
                     }
                 }
 
-                if (response.Content != null)
+                if (response.Data != null)
                 {
 
                     try
                     {
-
-                        var result = JsonConvert.DeserializeObject<List<string>>(response.Content);
-
-                        fetchtModel.Numbers = result;
+                        fetchtModel.Numbers = response.Data.Numbers;
 
                         keepTrying = false;
                     }
@@ -307,7 +256,7 @@ public class Fetcher
 public class FetchModel
 {
     public int Page { get; set; }
-    public List<string> Numbers { get; set; }
+    public List<double> Numbers { get; set; }
     public bool IsSuccess { get; set; }
 
 }
