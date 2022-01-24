@@ -79,12 +79,12 @@ namespace Crosscommerce.SortNumber.API.Controllers
 
             if (left < pivot)
             {
-                sort(left, Convert.ToInt32(pivot - 1), null);
+                sort(left, Convert.ToInt32(pivot - 1), allNumbers);
             }
 
             if (right > pivot)
             {
-                sort(Convert.ToInt32(pivot + 1), right, null);
+                sort(Convert.ToInt32(pivot + 1), right, allNumbers);
             }
         }
 
@@ -135,7 +135,7 @@ public class Fetcher
     {
         lock (@lock)
         {
-            if (fetchParameters.Numbers?.Count > 0 && fetchParameters.Page < 32)
+            if (fetchParameters.Numbers?.Count > 0)
                 fullListOfNumbers.AddRange(fetchParameters.Numbers);
             else
                 return null;
