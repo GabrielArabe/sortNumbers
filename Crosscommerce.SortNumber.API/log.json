@@ -745,3 +745,22 @@
 {"Timestamp":"2022-01-24T19:33:59.9631425-03:00","Level":"Information","MessageTemplate":"Task completed","RenderedMessage":"Task completed"}
 {"Timestamp":"2022-01-24T19:33:59.9673337-03:00","Level":"Information","MessageTemplate":"Task completed","RenderedMessage":"Task completed"}
 {"Timestamp":"2022-01-24T19:33:59.9705045-03:00","Level":"Information","MessageTemplate":"Task completed","RenderedMessage":"Task completed"}
+{"Timestamp":"2022-01-25T14:25:34.4511806-03:00","Level":"Information","MessageTemplate":"Starting 8 threads","RenderedMessage":"Starting 8 threads"}
+{"Timestamp":"2022-01-25T14:25:34.4593444-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T14:25:34.4597357-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T14:25:34.4598091-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T14:25:34.4598299-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T14:25:34.4598821-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T14:25:34.4599356-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T14:25:34.4599671-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T14:25:34.4601869-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T14:25:38.3692277-03:00","Level":"Warning","MessageTemplate":"Error getting page: Internal Server Error: Simulated internal error. Attempt number: 1. Next attempt: 2","RenderedMessage":"Error getting page: Internal Server Error: Simulated internal error. Attempt number: 1. Next attempt: 2"}
+{"Timestamp":"2022-01-25T16:10:43.5904700-03:00","Level":"Information","MessageTemplate":"Starting 8 threads","RenderedMessage":"Starting 8 threads"}
+{"Timestamp":"2022-01-25T16:10:43.5961708-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T16:10:43.5963038-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T16:10:43.5963310-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T16:10:43.5963496-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T16:10:43.5963696-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T16:10:43.5964579-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T16:10:43.5965876-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}
+{"Timestamp":"2022-01-25T16:10:43.6053257-03:00","Level":"Information","MessageTemplate":"Success starting worker","RenderedMessage":"Success starting worker"}

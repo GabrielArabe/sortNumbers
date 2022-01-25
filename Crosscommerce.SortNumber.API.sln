@@ -5,7 +5,15 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crosscommerce.SortNumber.API", "Crosscommerce.SortNumber.API\Crosscommerce.SortNumber.API.csproj", "{2AFC1DA5-52F6-4EB3-B2FE-8E812CEF53DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosscommerce.SortNumber.API.Tests", "Crosscommerce.SortNumber.API.Tests\Crosscommerce.SortNumber.API.Tests.csproj", "{D9B75008-63E1-49FC-9564-E89F7CD07FD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crosscommerce.SortNumber.API.Tests", "Crosscommerce.SortNumber.API.Tests\Crosscommerce.SortNumber.API.Tests.csproj", "{D9B75008-63E1-49FC-9564-E89F7CD07FD7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crosscommerce.SortNumber.Core", "Crosscommerce.SortNumber.Core\Crosscommerce.SortNumber.Core.csproj", "{1D1D5035-18D4-4F3A-A6F3-4E6FCFA83CFB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crosscommerce.SortNumber.Business", "Crosscommerce.SortNumber.Business\Crosscommerce.SortNumber.Business.csproj", "{B320B875-2E26-4C74-8943-D79782113BE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crosscommerce.SortNumber.External", "Crosscommerce.SortNumber.External\Crosscommerce.SortNumber.External.csproj", "{76C194B3-7AF1-4D42-9525-AE030BB98A15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosscommerce.SortNumber.Contract", "Crosscommerce.SortNumber.Contract\Crosscommerce.SortNumber.Contract.csproj", "{134FF9B3-E7F2-4280-A21B-8465BCA8FC10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,22 @@ Global
 		{D9B75008-63E1-49FC-9564-E89F7CD07FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9B75008-63E1-49FC-9564-E89F7CD07FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9B75008-63E1-49FC-9564-E89F7CD07FD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D1D5035-18D4-4F3A-A6F3-4E6FCFA83CFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D1D5035-18D4-4F3A-A6F3-4E6FCFA83CFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D1D5035-18D4-4F3A-A6F3-4E6FCFA83CFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D1D5035-18D4-4F3A-A6F3-4E6FCFA83CFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B320B875-2E26-4C74-8943-D79782113BE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B320B875-2E26-4C74-8943-D79782113BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B320B875-2E26-4C74-8943-D79782113BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B320B875-2E26-4C74-8943-D79782113BE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C194B3-7AF1-4D42-9525-AE030BB98A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C194B3-7AF1-4D42-9525-AE030BB98A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C194B3-7AF1-4D42-9525-AE030BB98A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C194B3-7AF1-4D42-9525-AE030BB98A15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{134FF9B3-E7F2-4280-A21B-8465BCA8FC10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{134FF9B3-E7F2-4280-A21B-8465BCA8FC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{134FF9B3-E7F2-4280-A21B-8465BCA8FC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{134FF9B3-E7F2-4280-A21B-8465BCA8FC10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

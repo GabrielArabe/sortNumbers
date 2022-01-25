@@ -7,10 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RestSharp;
-using Crosscommerce.SortNumber.API.Utils;
 using Crosscommerce.SortNumber.API.Model;
 using System.Text.Json;
 using Newtonsoft.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Crosscommerce.SortNumber.Contract;
+using Crosscommerce.SortNumber.Business;
+
 
 namespace Crosscommerce.SortNumber.API
 {
@@ -29,7 +32,7 @@ namespace Crosscommerce.SortNumber.API
                     webBuilder.UseStartup<Startup>();
                 });
 
-        
+
     }
 
 }

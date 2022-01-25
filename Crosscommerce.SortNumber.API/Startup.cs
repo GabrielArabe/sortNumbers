@@ -1,3 +1,7 @@
+using Crosscommerce.SortNumber.Business;
+using Crosscommerce.SortNumber.Contract;
+using Crosscommerce.SortNumber.Core;
+using Crosscommerce.SortNumber.External;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,8 +31,7 @@ namespace Crosscommerce.SortNumber.API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-
+        {            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -40,6 +43,11 @@ namespace Crosscommerce.SortNumber.API
                 var log = new LoggerConfiguration().WriteTo.File(new JsonFormatter(renderMessage: true), "log.json").CreateLogger();
                 return log;
             });
+
+            services.AddScoped<ISortNumbers, SortNumbers>();               
+            services.AddSingleton<ISorter, Sorter>();
+            services.AddTransient<IFetcher, Fetcher>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,9 +56,11 @@ namespace Crosscommerce.SortNumber.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Crosscommerce.SortNumber.API v1"));
+
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Crosscommerce.SortNumber.API v1"));
 
             app.UseHttpsRedirection();
 

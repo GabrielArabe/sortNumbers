@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\Crosscommerce.SortNumber.Business\Crosscommerce.SortNumber.Business.csproj" />
+    <ProjectReference Include="..\Crosscommerce.SortNumber.Core\Crosscommerce.SortNumber.Core.csproj" />
+    <ProjectReference Include="..\Crosscommerce.SortNumber.External\Crosscommerce.SortNumber.External.csproj" />
   </ItemGroup>
 
 </Project>
