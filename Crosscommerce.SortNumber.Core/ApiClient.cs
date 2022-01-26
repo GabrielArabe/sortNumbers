@@ -36,7 +36,6 @@ namespace Crosscommerce.SortNumber.Core
                     throw new Exception();
                 }
 
-                _logger.Information($"successful getting API result");
                 return new Result<T>() { Data = response.Data };
             }
             catch (Exception e)

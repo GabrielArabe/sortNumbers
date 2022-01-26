@@ -20,14 +20,15 @@ Foram criados testes unitários para verificar as respostas:
 Criado sistema de logs, atualmente salvos em disco e no player Datadog.
 
 **Sobre o Datadog**
+
 **Obs:** Criei uma conta teste para ter uma visualização melhor dos logs.
 Ao executar a aplicação, os logs serão gravados com os níveis: Info, Warn e Error.
 
 **Acesso ao datadog:**
-link: https://app.datadoghq.com/account/login?redirect=f
-usuário: gabriel@arabesaraiva.com
-senha: GabrielArabe123
-link área dos logs: https://app.datadoghq.com/logs
+* link: https://app.datadoghq.com/account/login?redirect=f
+* usuário: gabriel@arabesaraiva.com
+* senha: GabrielArabe123
+* link área dos logs: https://app.datadoghq.com/logs
 
 **Melhorias e Próximos passos**
 * Adicionar mais testes unitários;
