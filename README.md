@@ -7,7 +7,7 @@ A aplicação está hosteada na Azure, tendo a documentação do **Swagger** par
 
 **Detalhes Técnicos**
 
-Por ser um processo demorado devido as diversas consultas na API, foram tomadas algumas medidas para melhorar a performance: 
+Por ser um processo demorado, devido as diversas consultas na API foram tomadas algumas medidas para melhorar a performance: 
 
 * O processo de consulta a API foi feito com Multithreading com o número de núcleos do processador;
 * Foi criado um cache em memória com 10 minutos de expiração para a API retornar o valor processado anteriormente;
@@ -17,10 +17,20 @@ Foram criados testes unitários para verificar as respostas:
 * Da API
 * Da ordenação  
 
-Criado sistema de logs, atualmente salvos em disco.
+Criado sistema de logs, atualmente salvos em disco e no player Datadog.
+
+**Sobre o Datadog**
+**Obs:** Criei uma conta teste para ter uma visualização melhor dos logs.
+Ao executar a aplicação, os logs serão gravados com os níveis: Info, Warn e Error.
+
+**Acesso ao datadog:**
+link: https://app.datadoghq.com/account/login?redirect=f
+usuário: gabriel@arabesaraiva.com
+senha: GabrielArabe123
+link área dos logs: https://app.datadoghq.com/logs
 
 **Melhorias e Próximos passos**
 * Adicionar mais testes unitários;
 * Adicionar mais tratamentos de exceções; 
-* Utilizar um player (Ex.: Datadog) para exibir logs;
+* Melhoria dos logs para exibir de forma mais útil no Datadog;
 * Criar documentação com Postman.

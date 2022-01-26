@@ -5,8 +5,6 @@ using Crosscommerce.SortNumber.Core.Cache;
 using Crosscommerce.SortNumber.External;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,10 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Formatting.Json;
+using Serilog.Sinks.Datadog.Logs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Crosscommerce.SortNumber.API
 {
@@ -41,7 +37,11 @@ namespace Crosscommerce.SortNumber.API
 
             services.AddSingleton<Serilog.ILogger>((s) =>
             {
-                var log = new LoggerConfiguration().WriteTo.File(new JsonFormatter(renderMessage: true), $"_logs\\log_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.json").CreateLogger();
+                var log = new LoggerConfiguration()
+                .WriteTo.File(new JsonFormatter(renderMessage: true), $"_logs\\log_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.json")
+                .WriteTo.DatadogLogs("a9a41543fc1187cfb949706e8d169d74", configuration: new DatadogConfiguration() { Url = "https://http-intake.logs.datadoghq.com" })
+                .WriteTo.Console()
+                .CreateLogger();
                 return log;
             });
 
