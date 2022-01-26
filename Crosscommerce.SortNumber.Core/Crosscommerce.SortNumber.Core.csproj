@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RestSharp" Version="107.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Crosscommerce.SortNumber.Contract\Crosscommerce.SortNumber.Contract.csproj" />
   </ItemGroup>
 

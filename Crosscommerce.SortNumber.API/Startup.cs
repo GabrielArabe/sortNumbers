@@ -1,6 +1,7 @@
 using Crosscommerce.SortNumber.Business;
 using Crosscommerce.SortNumber.Contract;
 using Crosscommerce.SortNumber.Core;
+using Crosscommerce.SortNumber.Core.Cache;
 using Crosscommerce.SortNumber.External;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +33,7 @@ namespace Crosscommerce.SortNumber.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {            
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Crosscommerce.SortNumber.API", Version = "v1" });
@@ -46,8 +47,9 @@ namespace Crosscommerce.SortNumber.API
 
             services.AddScoped<ISortNumbers, SortNumbers>();               
             services.AddSingleton<ISorter, Sorter>();
-            services.AddTransient<IFetcher, Fetcher>();
-
+            services.AddTransient<DienekesApiClient, DienekesApiClient>();
+            services.AddSingleton<IApiClient, ApiClient>();
+            services.AddSingleton<ICacher, Cacher>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

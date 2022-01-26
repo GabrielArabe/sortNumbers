@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Crosscommerce.SortNumber.External.Models
 {
-    public class FetchModel
+    internal class DienekesApiModel
     {
         public int Page { get; set; }
         public List<double> Numbers { get; set; }

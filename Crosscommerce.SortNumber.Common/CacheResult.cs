@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crosscommerce.SortNumber.Contract
+namespace Crosscommerce.SortNumber.Core.Common
 {
-    public interface ISortNumbers
+    public class CacheResult<T>:Result<T>
     {
-        ApiResult<List<double>> GetSortedNumbers();
-
+        public bool IsCachedResult { get; set; }
     }
 }

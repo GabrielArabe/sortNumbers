@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Crosscommerce.SortNumber.Contract;
+using Crosscommerce.SortNumber.Common;
 
 namespace Crosscommerce.SortNumber.API.Controllers
 {
@@ -21,23 +22,28 @@ namespace Crosscommerce.SortNumber.API.Controllers
         }
 
         [HttpGet]
-        public JsonResult Get()
+        public ApiResult<List<double>> Get()
         {
             try
             {
-                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-                System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-
                 var resultSortedNumbers = _sortnumbers.GetSortedNumbers();
 
-                _logger.Information($"Amount of numbers: {resultSortedNumbers.Count.ToString()}");
-                return new JsonResult(resultSortedNumbers.Count);
+                if (resultSortedNumbers.isSuccess)
+                {
+                    if (resultSortedNumbers.RequestStatus == ApiResult<List<double>>.ApiRequestStatus.Pending)
+                        _logger.Information($"Request in progress...");
+                    else if (resultSortedNumbers.RequestStatus == ApiResult<List<double>>.ApiRequestStatus.Completed)
+                        _logger.Information($"Amount of numbers: {resultSortedNumbers.Data?.Count ?? 0}");
+                }
 
+                HttpContext.Response.StatusCode = resultSortedNumbers.StatusCode;
+                return resultSortedNumbers;
             }
             catch (Exception ex)
             {
                 _logger.Error("Error getting result: ", ex);
-                return new JsonResult(ex.Message);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                return new ApiResult<List<double>>() { Exception = ex, RequestStatus = ApiResult<List<double>>.ApiRequestStatus.Error, StatusCode = (int)System.Net.HttpStatusCode.InternalServerError };
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using Crosscommerce.SortNumber.API;
+﻿using Crosscommerce.SortNumber.Common;
 using Crosscommerce.SortNumber.Contract;
 using System;
 using System.Collections.Generic;
@@ -71,6 +71,8 @@ namespace Crosscommerce.SortNumber.Core
         }
         public List<double> QuickSort(List<double> allNumbers)
         {
+            if (allNumbers == null)
+                throw new ArgumentNullException(nameof(allNumbers));
             try
             {
                 //var fetcher = new Fetcher(_logger);

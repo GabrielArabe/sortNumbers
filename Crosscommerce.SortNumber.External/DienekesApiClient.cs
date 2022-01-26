@@ -1,5 +1,4 @@
-﻿using Crosscommerce.SortNumber.API;
-using Crosscommerce.SortNumber.Contract;
+﻿using Crosscommerce.SortNumber.Contract;
 using Crosscommerce.SortNumber.External.Models;
 using RestSharp;
 using System;
@@ -8,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace Crosscommerce.SortNumber.External
 {
-    public class Fetcher : IFetcher
+    //TODO: Implement logging
+    public class DienekesApiClient : IDienekesApiClient
     {
+        private IApiClient _apiClient;
+        public DienekesApiClient(IApiClient apiClient)
+        {
+            _apiClient = apiClient;
+        }
 
         private int lastPage = 0;
         private static object @lock = new Object();
@@ -19,7 +24,8 @@ namespace Crosscommerce.SortNumber.External
         {
             try
             {
-                var threadCount = Environment.ProcessorCount;
+                //TODO: Uncomment below
+                var threadCount = 1;// Environment.ProcessorCount;
                 //_logger.Information($"Starting {threadCount} threads");
                 var workers = new List<Task>();
                 for (int i = 0; i < threadCount; i++)
@@ -30,12 +36,12 @@ namespace Crosscommerce.SortNumber.External
                 Task.WaitAll(workers.ToArray());
 
                 //_logger.Information("Success getting all numbers");
-                return  fullListOfNumbers ;
+                return fullListOfNumbers;
             }
             catch (Exception ex)
             {
                 //_logger.Error("Error getting all numbers", ex);
-                throw new Exception("Error getting all numbers", ex) ;
+                throw new Exception("Error getting all numbers", ex);
             }
 
         }
@@ -46,7 +52,7 @@ namespace Crosscommerce.SortNumber.External
             {
                 var t = new Task(() =>
                 {
-                    FetchModel nextParameter = getNextParameters(true);
+                    DienekesApiModel nextParameter = getNextParameters(true);
                     while (nextParameter != null)
                     {
                         var t = startNewTask(nextParameter);
@@ -68,13 +74,13 @@ namespace Crosscommerce.SortNumber.External
 
         }
 
-        private FetchModel taskCompleted(FetchModel fetchParameters)
+        private DienekesApiModel taskCompleted(DienekesApiModel fetchParameters)
         {
             try
             {
                 lock (@lock)
                 {
-                    if (fetchParameters.Numbers?.Count > 0)
+                    if (fetchParameters.Numbers?.Count > 0)//TODO: Remove the page condition
                         fullListOfNumbers.AddRange(fetchParameters.Numbers);
                     else
                         return null;
@@ -90,11 +96,11 @@ namespace Crosscommerce.SortNumber.External
 
         }
 
-        private Task startNewTask(FetchModel fetchModel)
+        private Task startNewTask(DienekesApiModel fetchModel)
         {
             try
             {
-                var t = new Task(new Action<object>((p) => getPage((FetchModel)p)), fetchModel, System.Threading.Tasks.TaskCreationOptions.None);
+                var t = new Task(new Action<object>((p) => getPage((DienekesApiModel)p)), fetchModel, System.Threading.Tasks.TaskCreationOptions.None);
                 t.Start();
                 return t;
             }
@@ -106,11 +112,11 @@ namespace Crosscommerce.SortNumber.External
 
         }
 
-        private FetchModel getNextParameters(bool shouldLock)
+        private DienekesApiModel getNextParameters(bool shouldLock)
         {
-            FetchModel createFetchModel()
+            DienekesApiModel createFetchModel()
             {
-                var fetchParameters = new FetchModel() { Page = ++lastPage };
+                var fetchParameters = new DienekesApiModel() { Page = ++lastPage };
                 return fetchParameters;
             };
 
@@ -127,7 +133,7 @@ namespace Crosscommerce.SortNumber.External
             }
         }
 
-        private void getPage(FetchModel fetchModel)
+        private void getPage(DienekesApiModel fetchModel)
         {
             var keepTrying = true;
             var attempts = 1;
@@ -151,15 +157,14 @@ namespace Crosscommerce.SortNumber.External
             {
                 try
                 {
-                    var path = $"http://challenge.dienekes.com.br/api/numbers/?page={fetchModel.Page}";
+                    var result = _apiClient.GetApiResult<PagesModel>($"http://challenge.dienekes.com.br/api/numbers/?page={fetchModel.Page}");
 
-                    var client = new RestClient(path);
-                    var request = new RestRequest("", method: Method.Get);
+                    if (result == null)
+                        throw new Exception($"Null result from the API, page {fetchModel.Page}");
 
-                    var response = client.ExecuteAsync<PagesModel>(request).Result;
-                    if (!response.IsSuccessful)
+                    if (!result.isSuccess)
                     {
-                        var e = handleError(maxAttempts, ref attempts, $"{response.StatusDescription}: {response.Data?.error ?? string.Empty}");
+                        var e = handleError(maxAttempts, ref attempts, $"{result.Exception.Message}: {result.Data?.error ?? string.Empty}");
                         if (e != null)
                             throw e;
                         else
@@ -169,21 +174,12 @@ namespace Crosscommerce.SortNumber.External
                         }
                     }
 
-                    if (response.Data != null)
+                    if (result.Data != null)
                     {
+                        fetchModel.Numbers = result.Data.Numbers;
+                        keepTrying = false;
 
-                        try
-                        {
-                            fetchModel.Numbers = response.Data.Numbers;
-
-                            keepTrying = false;
-                        }
-                        catch (Exception)
-                        {
-                            throw;
-                        }
-
-                        System.Diagnostics.Debug.WriteLine($"Page {fetchModel.Page} fetched with {fetchModel.Numbers.Count} numbers");
+                        System.Diagnostics.Debug.WriteLine($"Page {fetchModel.Page} fetched with {fetchModel.Numbers?.Count ?? 0} numbers");
                     }
                     else
                     {

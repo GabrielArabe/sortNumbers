@@ -1,18 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RestSharp;
-using Crosscommerce.SortNumber.API.Model;
-using System.Text.Json;
-using Newtonsoft.Json;
-using Microsoft.Extensions.DependencyInjection;
-using Crosscommerce.SortNumber.Contract;
-using Crosscommerce.SortNumber.Business;
 
 
 namespace Crosscommerce.SortNumber.API
@@ -21,6 +8,8 @@ namespace Crosscommerce.SortNumber.API
     {
         public static void Main(string[] args)
         {
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
 
             CreateHostBuilder(args).Build().Run();            
         }

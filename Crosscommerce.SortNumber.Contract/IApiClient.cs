@@ -1,4 +1,5 @@
 ﻿using Crosscommerce.SortNumber.Common;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Crosscommerce.SortNumber.Contract
 {
-    public interface ISortNumbers
+    public interface IApiClient
     {
-        ApiResult<List<double>> GetSortedNumbers();
-
+        Result<T> GetApiResult<T>(string url);
     }
 }

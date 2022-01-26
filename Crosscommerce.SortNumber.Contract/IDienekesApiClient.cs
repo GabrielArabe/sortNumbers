@@ -2,7 +2,7 @@
 
 namespace Crosscommerce.SortNumber.Contract
 {
-    public interface IFetcher
+    public interface IDienekesApiClient
     {
         List<double> GetAllNumbers();
     }
