@@ -7,7 +7,7 @@ A aplicação está hosteada na Azure, tendo a documentação do **Swagger** par
 
 **Detalhes Técnicos**
 
-Por ser um processo demorado, devido as diversas consultas na API foram tomadas algumas medidas para melhorar a performance: 
+Por ser um processo demorado devido as diversas consultas na API, foram tomadas algumas medidas para melhorar a performance: 
 
 * O processo de consulta a API foi feito com Multithreading com o número de núcleos do processador;
 * Foi criado um cache em memória com 10 minutos de expiração para a API retornar o valor processado anteriormente;
