@@ -1,32 +1,34 @@
-﻿using Crosscommerce.SortNumber.Contract;
+﻿using Crosscommerce.SortNumber.Common;
+using Crosscommerce.SortNumber.Contract;
 using Crosscommerce.SortNumber.External.Models;
 using RestSharp;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Crosscommerce.SortNumber.External
 {
-    //TODO: Implement logging
     public class DienekesApiClient : IDienekesApiClient
     {
         private IApiClient _apiClient;
-        public DienekesApiClient(IApiClient apiClient)
+        private ILogger _logger;
+        public DienekesApiClient(IApiClient apiClient, ILogger logger)
         {
             _apiClient = apiClient;
+            _logger = logger;   
         }
 
         private int lastPage = 0;
         private static object @lock = new Object();
         private List<double> fullListOfNumbers = new List<double>(1000000);
 
-        public List<double> GetAllNumbers()
+        public Result<List<double>> GetAllNumbers()
         {
             try
             {
-                //TODO: Uncomment below
-                var threadCount = 1;// Environment.ProcessorCount;
-                //_logger.Information($"Starting {threadCount} threads");
+                var threadCount = Environment.ProcessorCount;
+                _logger.Information($"Starting {threadCount} threads");
                 var workers = new List<Task>();
                 for (int i = 0; i < threadCount; i++)
                 {
@@ -35,13 +37,13 @@ namespace Crosscommerce.SortNumber.External
 
                 Task.WaitAll(workers.ToArray());
 
-                //_logger.Information("Success getting all numbers");
-                return fullListOfNumbers;
+                _logger.Information($"Success getting all numbers: {fullListOfNumbers.Count}");
+                return new Result<List<double>>() { Data = fullListOfNumbers };
             }
             catch (Exception ex)
             {
-                //_logger.Error("Error getting all numbers", ex);
-                throw new Exception("Error getting all numbers", ex);
+                _logger.Error("Error getting all numbers", ex);
+                return new Result<List<double>>() { Exception = new Exception("Error getting all numbers", ex) };
             }
 
         }
@@ -63,12 +65,11 @@ namespace Crosscommerce.SortNumber.External
                 });
 
                 t.Start();
-                //_logger.Information("Success starting worker");
                 return t;
             }
             catch (Exception ex)
             {
-                //_logger.Error("Error starting worker", ex);
+                _logger.Error("Error starting worker", ex);
                 throw;
             }
 
@@ -80,7 +81,7 @@ namespace Crosscommerce.SortNumber.External
             {
                 lock (@lock)
                 {
-                    if (fetchParameters.Numbers?.Count > 0)//TODO: Remove the page condition
+                    if (fetchParameters.Numbers?.Count > 0 && fetchParameters.Page < 10)
                         fullListOfNumbers.AddRange(fetchParameters.Numbers);
                     else
                         return null;
@@ -90,8 +91,8 @@ namespace Crosscommerce.SortNumber.External
             }
             catch (Exception ex)
             {
-                //_logger.Error("Error completing task", ex);
-                throw;
+                _logger.Error("Error completing task", ex);
+                throw new Exception("Error completing task", ex);
             }
 
         }
@@ -106,7 +107,7 @@ namespace Crosscommerce.SortNumber.External
             }
             catch (Exception ex)
             {
-                //_logger.Error("Error starting new task", ex);
+                _logger.Error("Error starting new task", ex);
                 throw;
             }
 
@@ -138,15 +139,14 @@ namespace Crosscommerce.SortNumber.External
             var keepTrying = true;
             var attempts = 1;
             var maxAttempts = 10;
-
             Exception handleError(int maxAttempts, ref int attempts, string errorMessage)
             {
-                //_logger.Warning($"Error getting page: {errorMessage}. Attempt number: {attempts}. Next attempt: {attempts + 1}");
+                _logger.Warning($"Error getting page: {errorMessage}. Attempt number: {attempts}. Next attempt: {attempts + 1}");
                 attempts++;
                 if (attempts >= maxAttempts)
                 {
                     keepTrying = false;
-                    //_logger.Error($"reached maximum number of attempts: {attempts}. Error: {errorMessage}");
+                    _logger.Error($"reached maximum number of attempts: {attempts}. Error: {errorMessage}");
                     return new Exception(errorMessage);
                 }
 
@@ -193,7 +193,10 @@ namespace Crosscommerce.SortNumber.External
                 {
                     var e = handleError(maxAttempts, ref attempts, ex.Message);
                     if (e != null)
+                    {
+                        _logger.Error(ex.Message, e);
                         throw e;
+                    }
                     else
                     {
                         Task.Delay(2000);

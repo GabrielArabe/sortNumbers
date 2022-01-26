@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Crosscommerce.SortNumber.Contract
 {
-    public interface ISortNumbers
+    public interface ISortNumbersBusiness
     {
         ApiResult<List<double>> GetSortedNumbers();
 

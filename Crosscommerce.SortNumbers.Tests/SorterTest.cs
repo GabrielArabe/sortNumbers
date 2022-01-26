@@ -85,8 +85,23 @@ namespace Crosscommerce.SortNumbers.Tests
         [Test]
         public void QuickSort_NegativeDoubleNumbers()
         {
-            //TODO: Implement QuickSort_NegativeDoubleNumbers
-            throw new NotImplementedException();
+            List<double> input = new List<double>()
+            {
+                -0.1, -0.8, -0.12, -0.4, -0.3, -0.10, -0.100, -0.0011, -0.04510, -0.0011
+            };
+            List<double> expectedOutput = new List<double>()
+            {
+               -0.8, -0.4, -0.3, -0.12, -0.100, -0.10, -0.1, -0.04510, -0.0011, -0.0011
+            };
+
+            var output = _sorter.QuickSort(input);
+            Assert.IsNotNull(output);
+            Assert.IsTrue(output.Count == 10);
+
+            for (int i = 0; i < output.Count; i++)
+            {
+                Assert.AreEqual(expectedOutput[i], output[i]);
+            }
         }
     }
 }

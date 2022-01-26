@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Crosscommerce.SortNumber.Common;
+using System.Collections.Generic;
 
 namespace Crosscommerce.SortNumber.Contract
 {
     public interface IDienekesApiClient
     {
-        List<double> GetAllNumbers();
+        Result<List<double>> GetAllNumbers();
     }
 }

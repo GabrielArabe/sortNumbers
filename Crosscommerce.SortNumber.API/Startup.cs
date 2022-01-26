@@ -39,15 +39,15 @@ namespace Crosscommerce.SortNumber.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Crosscommerce.SortNumber.API", Version = "v1" });
             });
 
-            services.AddTransient<Serilog.ILogger>((s) =>
+            services.AddSingleton<Serilog.ILogger>((s) =>
             {
-                var log = new LoggerConfiguration().WriteTo.File(new JsonFormatter(renderMessage: true), "log.json").CreateLogger();
+                var log = new LoggerConfiguration().WriteTo.File(new JsonFormatter(renderMessage: true), $"log_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.json").CreateLogger();
                 return log;
             });
 
-            services.AddScoped<ISortNumbers, SortNumbers>();               
+            services.AddScoped<ISortNumbersBusiness, SortNumbersBusiness>();               
             services.AddSingleton<ISorter, Sorter>();
-            services.AddTransient<DienekesApiClient, DienekesApiClient>();
+            services.AddTransient<IDienekesApiClient, DienekesApiClient>();
             services.AddSingleton<IApiClient, ApiClient>();
             services.AddSingleton<ICacher, Cacher>();
         }

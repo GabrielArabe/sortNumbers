@@ -37,11 +37,11 @@ namespace Crosscommerce.SortNumbers.Tests
                     };
                 });
 
-            var client = new DienekesApiClient(mock.Object);
+            var client = new DienekesApiClient(mock.Object, null);
             var result = client.GetAllNumbers();
 
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count == 300);
+            Assert.IsTrue(result.Data.Count == 300);
 
         }
 

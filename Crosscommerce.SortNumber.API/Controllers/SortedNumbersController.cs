@@ -14,8 +14,8 @@ namespace Crosscommerce.SortNumber.API.Controllers
     public class SortedNumbersController : ControllerBase
     {
         private ILogger _logger;
-        private ISortNumbers _sortnumbers;
-        public SortedNumbersController(ILogger logger, ISortNumbers sortNumbers)
+        private ISortNumbersBusiness _sortnumbers;
+        public SortedNumbersController(ILogger logger, ISortNumbersBusiness sortNumbers)
         {
             _logger = logger;
             _sortnumbers = sortNumbers;
