@@ -1,0 +1,24 @@
+{"Timestamp":"2022-01-26T10:30:35.2788853-03:00","Level":"Information","MessageTemplate":"The request is being processed. Try again in some minutes.","RenderedMessage":"The request is being processed. Try again in some minutes."}
+{"Timestamp":"2022-01-26T10:30:35.2865680-03:00","Level":"Information","MessageTemplate":"Starting 8 threads","RenderedMessage":"Starting 8 threads"}
+{"Timestamp":"2022-01-26T10:30:36.5715621-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:36.5715667-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:36.5715678-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:36.5715652-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:36.5715666-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:36.5715880-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:36.5716063-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:36.5716095-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:37.4707714-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:37.4827048-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:37.4891532-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:37.4914482-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:37.5073928-03:00","Level":"Error","MessageTemplate":"Get API response failed Internal Server Error InternalServerError","RenderedMessage":"Get API response failed Internal Server Error InternalServerError"}
+{"Timestamp":"2022-01-26T10:30:37.5082628-03:00","Level":"Warning","MessageTemplate":"Error getting page: Internal Server Error (InternalServerError): Simulated internal error. Attempt number: 1. Next attempt: 2","RenderedMessage":"Error getting page: Internal Server Error (InternalServerError): Simulated internal error. Attempt number: 1. Next attempt: 2"}
+{"Timestamp":"2022-01-26T10:30:37.5125017-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:37.5129596-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:37.5191242-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:37.8006371-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:38.1070181-03:00","Level":"Information","MessageTemplate":"successful getting API result","RenderedMessage":"successful getting API result"}
+{"Timestamp":"2022-01-26T10:30:38.1100162-03:00","Level":"Information","MessageTemplate":"Success getting all numbers: 900","RenderedMessage":"Success getting all numbers: 900"}
+{"Timestamp":"2022-01-26T10:30:38.1119090-03:00","Level":"Information","MessageTemplate":"Successful sorting numbers: Total of 900 numbers","RenderedMessage":"Successful sorting numbers: Total of 900 numbers"}
+{"Timestamp":"2022-01-26T10:30:38.1123152-03:00","Level":"Information","MessageTemplate":"Amount of numbers: 900","RenderedMessage":"Amount of numbers: 900"}

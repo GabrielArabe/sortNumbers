@@ -41,7 +41,7 @@ namespace Crosscommerce.SortNumber.API
 
             services.AddSingleton<Serilog.ILogger>((s) =>
             {
-                var log = new LoggerConfiguration().WriteTo.File(new JsonFormatter(renderMessage: true), $"log_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.json").CreateLogger();
+                var log = new LoggerConfiguration().WriteTo.File(new JsonFormatter(renderMessage: true), $"_logs\\log_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.json").CreateLogger();
                 return log;
             });
 

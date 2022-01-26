@@ -81,7 +81,7 @@ namespace Crosscommerce.SortNumber.External
             {
                 lock (@lock)
                 {
-                    if (fetchParameters.Numbers?.Count > 0 && fetchParameters.Page < 10)
+                    if (fetchParameters.Numbers?.Count > 0)
                         fullListOfNumbers.AddRange(fetchParameters.Numbers);
                     else
                         return null;
