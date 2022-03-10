@@ -1,6 +1,6 @@
 # Sort Numbers
 **Intro:**
-	Essa solução faz requisições em todas as páginas da API disposta pela Crosscommerce (http://challenge.dienekes.com.br/api/numbers?page={pageVar}), a cada requisição a lista de doubles é inserida numa lista. Após receber todas as páginas, é utilizado um algorítmo (Quick Sort) para ordenar os valores da lista completa do menor para o maior. Por fim, essa lista ordenada é exposta numa API (https://sortnumbers.azurewebsites.net/api/sortednumbers).
+	Essa solução faz requisições em todas as páginas da API disposta por uma empresa (http://challenge.dienekes.com.br/api/numbers?page={pageVar}), a cada requisição a lista de doubles é inserida numa lista. Após receber todas as páginas, é utilizado um algorítmo (Quick Sort) para ordenar os valores da lista completa do menor para o maior. Por fim, essa lista ordenada é exposta numa API (https://sortnumbers.azurewebsites.net/api/sortednumbers).
 
 **Como testar**
 A aplicação está hosteada na Azure, tendo a documentação do **Swagger** para indicar a rota https://sortnumbers.azurewebsites.net/swagger do Get. A requisição retorna uma lista ordenada de 1 milhão de números, por isso é provável que o Swagger não consiga apresentar o valor, é mais indicado fazer essa requisição (https://sortnumbers.azurewebsites.net/api/sortednumbers) utilizando o Postman ou, se não for possível, o Browser.
